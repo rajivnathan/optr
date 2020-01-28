@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: optr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: optr
+  template:
+    metadata:
+      labels:
+        name: optr
+    spec:
+      serviceAccountName: optr
+      containers:
+        - name: optr
+          # Replace this with the built image name
+          image: REPLACE_IMAGE
+          command:
+          - optr
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "optr"
